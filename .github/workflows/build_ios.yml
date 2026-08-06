@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-15 # Máquina Apple Silicon M1/M2 super rápida do GitHub
+    runs-on: macos-14 # Máquina Apple Silicon M1/M2 super rápida do GitHub
 
     steps:
       - name: Code Checkout
