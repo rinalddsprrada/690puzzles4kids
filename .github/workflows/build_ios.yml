@@ -3,6 +3,11 @@ name: Build IPA Ad-Hoc Solar2D (Fix iostemplate Local)
 on:
   workflow_dispatch:
 
+# ADICIONE ESTAS LINHAS: Cancela builds pendentes automagicamente
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: macos-14 # Máquina Apple Silicon M1/M2 super rápida do GitHub
