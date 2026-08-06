@@ -1,0 +1,64 @@
+{
+    "ios": [
+        {
+            "beta": false,
+            "coronaVersion": 172000,
+            "failMessage": "install or xcode-select Xcode 15.2 to enable",
+            "label": "17.2",
+            "xcodeVersion": "17.2"
+        },
+        {
+            "beta": false,
+            "coronaVersion": 172000,
+            "customTemplate": "-angle",
+            "failMessage": "install or xcode-select Xcode 15.2 to enable",
+            "label": "17.2 Metal",
+            "xcodeVersion": "17.2"
+        },
+        {
+            "beta": false,
+            "coronaVersion": 162000,
+            "failMessage": "install or xcode-select Xcode 14.2 to enable",
+            "label": "16.2",
+            "xcodeVersion": "16.2"
+        },
+        {
+            "beta": false,
+            "coronaVersion": 162000,
+            "customTemplate": "-angle",
+            "failMessage": "install or xcode-select Xcode 14.2 to enable",
+            "label": "16.2 Metal",
+            "xcodeVersion": "16.2"
+        },
+        {
+            "beta": false,
+            "coronaVersion": 155000,
+            "failMessage": "install or xcode-select Xcode 13.4.1 to enable",
+            "label": "15.5",
+            "xcodeVersion": "15.5"
+        },
+        {
+            "beta": false,
+            "coronaVersion": 155000,
+            "customTemplate": "-angle",
+            "failMessage": "install or xcode-select Xcode 13.4.1 to enable",
+            "label": "15.5 Metal",
+            "xcodeVersion": "15.5"
+        },
+        {
+            "beta": false,
+            "coronaVersion": 152000,
+            "failMessage": "install or xcode-select Xcode 13.2.1 to enable",
+            "label": "15.2",
+            "xcodeVersion": "15.2"
+        },
+        {
+            "beta": false,
+            "coronaVersion": 152000,
+            "customTemplate": "-angle",
+            "failMessage": "install or xcode-select Xcode 13.2.1 to enable",
+            "label": "15.2 Metal",
+            "xcodeVersion": "15.2"
+        }
+    ]
+}
