@@ -66,7 +66,7 @@ jobs:
             sed -i '' '/plugins *=/,/}/d' codigo_extraido/build.settings || true
           fi
           
-          # 5. GERAR CONFIG_PARAM COM A SINTAXE EXATA DO SEU LUA (ADAPTADO PARA MACOS)
+          # 5. GERAR CONFIG_PARAM COM A SINTAXE DO SEU LUA
           cat << EOF > build_android.lua
           local params = {
               platform = "android",
@@ -83,9 +83,15 @@ jobs:
           echo "Validando arquivo final build_android.lua:"
           cat build_android.lua
           
-          # 6. EXECUÇÃO DO CORONABUILDER
+          # 6. FIX DO DKJSON: Aponta o LUA_PATH explicitamente para os recursos compartilhados do Solar2D Native
+          # Isso faz o CoronaBuilder achar o dkjson.lua, rtt.lua e outros arquivos de sistema.
+          export LUA_PATH="$RAIZ_PROJETO/Corona.2026.3731/Corona-3731/Native/Corona/shared/resource/?.lua;;"
+          echo "LUA_PATH configurado para: \$LUA_PATH"
+
+          # 7. EXECUÇÃO DO CORONABUILDER
           echo "Iniciando compilação nativa Android..."
           "$TARGET_BUILDER" build --lua build_android.lua
+
 
 
       - name: Coletar Arquivo APK Gerado
