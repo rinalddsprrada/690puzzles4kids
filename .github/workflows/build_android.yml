@@ -51,7 +51,7 @@ jobs:
           rm -rf build
           mkdir -p build
           
-          # 2. Captura caminhos absolutos fundamentais do SDK do Solar2D
+          # 2. Captura caminhos absolutos fundamentais do SDK do Solar2D e do Runner
           RAIZ_PROJETO=$(pwd)
           TARGET_BUILDER="$RAIZ_PROJETO/Corona.2026.3731/Corona-3731/Native/Corona/mac/bin/CoronaBuilder.app/Contents/MacOS/CoronaBuilder"
           
@@ -60,37 +60,33 @@ jobs:
           sudo xattr -rd com.apple.quarantine "$RAIZ_PROJETO/Corona.2026.3731" || true
           chmod -R +x "$RAIZ_PROJETO/Corona.2026.3731" || true
           
-          # 4. Injeta dinamicamente as variáveis do Android SDK padrão do runner do GitHub
-          export ANDROID_HOME=$ANDROID_SDK_ROOT
-          
-          # 5. TRUQUE ANTIFALHA DE PLUGINS: Desativa plugins incompatíveis com o modo offline no build.settings
+          # 4. TRUQUE ANTIFALHA DE PLUGINS: Desativa plugins incompatíveis com o modo offline no build.settings
           if [ -f "codigo_extraido/build.settings" ]; then
             echo "Ajustando build.settings para compilação offline pura..."
             sed -i '' '/plugins *=/,/}/d' codigo_extraido/build.settings || true
           fi
           
-          # 6. GERAR CONFIG_PARAM COM SINTAXE DO ANDROID
-          # Nota: Para gerar um .aab (Google Play), mude o targetAppStore de "none" para "google"
-          cat << 'EOF' > build_android.lua
-          return {
-              appName = "Furniture Puzzle 4 Kids",
+          # 5. GERAR CONFIG_PARAM COM A SINTAXE EXATA DO SEU LUA (ADAPTADO PARA MACOS)
+          cat << EOF > build_android.lua
+          local params = {
               platform = "android",
+              appName = "Furniture Puzzle 4 Kids",
               appVersion = "1.0.0",
-              projectPath = "codigo_extraido",
-              dstPath = "build",
-              versionCode = "100",
-              androidAppPackage = "com.comuzz.Puzzle4KidsFurniture",
-              targetAppStore = "none" 
-              }
+              projectPath = "$RAIZ_PROJETO/codigo_extraido",
+              dstPath = "$RAIZ_PROJETO/build",
+              androidSdk = "$ANDROID_SDK_ROOT",
+              androidAppPackage = "com.iabuzz.Puzzle4KidsFurniture"
           }
+          return params
           EOF
 
           echo "Validando arquivo final build_android.lua:"
           cat build_android.lua
           
-          # 7. EXECUÇÃO DO CORONABUILDER
+          # 6. EXECUÇÃO DO CORONABUILDER
           echo "Iniciando compilação nativa Android..."
           "$TARGET_BUILDER" build --lua build_android.lua
+
 
       - name: Coletar Arquivo APK Gerado
         uses: actions/upload-artifact@v4
