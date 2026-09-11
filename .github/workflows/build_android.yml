@@ -80,7 +80,7 @@ jobs:
               dstPath = "build",
               android = {
                   versionCode = "100",
-                  packageName = "com.comuzz.Puzzle4KidsFurniture",
+                  androidAppPackage = "com.comuzz.Puzzle4KidsFurniture",
                   targetAppStore = "none" 
               }
           }
