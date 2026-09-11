@@ -1,0 +1,101 @@
+name: Build APK/AAB Android Solar2D (Offline Local)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-14 # Mantido no macOS para compatibilidade total com os scripts e ferramentas do Solar2D
+
+    steps:
+      - name: Code Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurar Java JDK 17 (Obrigatório para Android)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+
+      - name: Baixar o Código Fonte (.zip)
+        run: |
+          # Adicione o link do seu ZIP entre as aspas abaixo:
+          curl -L -o projeto.zip "https://abuzznewasset.b-cdn.net/furniture_more_apps.zip"
+
+      - name: Extrair Código Fonte e Corrigir Raiz do main.lua
+        run: |
+          mkdir -p codigo_extraido
+          
+          # Extrai qualquer arquivo .zip presente na raiz do seu repositorio
+          unzip -o *.zip -d codigo_extraido/
+          
+          # TRUQUE DEFINITIVO: Se o ZIP criou uma pasta interna, trazemos os arquivos para a raiz
+          # Isso impede o "Build script failed" por falta de arquivos estruturais do jogo
+          cd codigo_extraido
+          if [ ! -f main.lua ]; then
+            echo "main.lua nao encontrado na raiz. Buscando em subpassas..."
+            SUBPASTA=$(find . -name "main.lua" -maxdepth 3 | head -n 1 | sed 's|/main.lua||')
+            if [ ! -z "$SUBPASTA" ]; then
+              echo "Movendo arquivos de $SUBPASTA para a raiz..."
+              mv "$SUBPASTA"/* . 2>/dev/null || true
+            fi
+          fi
+          
+          echo "Conteudo final da pasta de compilaçao:"
+          ls -la
+          cd ..
+
+      - name: Compilar App Android via CoronaBuilder Offline
+        run: |
+          # 1. Garante que as pastas de destino existam limpas
+          rm -rf build
+          mkdir -p build
+          
+          # 2. Captura caminhos absolutos fundamentais do SDK do Solar2D
+          RAIZ_PROJETO=$(pwd)
+          TARGET_BUILDER="$RAIZ_PROJETO/Corona.2026.3731/Corona-3731/Native/Corona/mac/bin/CoronaBuilder.app/Contents/MacOS/CoronaBuilder"
+          
+          # 3. TRUQUE DE SEGURANÇA: Remove os bits de quarentena do macOS (Gatekeeper) do SDK
+          echo "Limpando quarentena profunda do SDK do Solar2D..."
+          sudo xattr -rd com.apple.quarantine "$RAIZ_PROJETO/Corona.2026.3731" || true
+          chmod -R +x "$RAIZ_PROJETO/Corona.2026.3731" || true
+          
+          # 4. Injeta dinamicamente as variáveis do Android SDK padrão do runner do GitHub
+          export ANDROID_HOME=$ANDROID_SDK_ROOT
+          
+          # 5. TRUQUE ANTIFALHA DE PLUGINS: Desativa plugins incompatíveis com o modo offline no build.settings
+          if [ -f "codigo_extraido/build.settings" ]; then
+            echo "Ajustando build.settings para compilação offline pura..."
+            sed -i '' '/plugins *=/,/}/d' codigo_extraido/build.settings || true
+          fi
+          
+          # 6. GERAR CONFIG_PARAM COM SINTAXE DO ANDROID
+          # Nota: Para gerar um .aab (Google Play), mude o targetAppStore de "none" para "google"
+          cat << 'EOF' > build_android.lua
+          return {
+              appName = "Furniture Puzzle 4 Kids",
+              platform = "android",
+              appVersion = "1.0.0",
+              projectPath = "codigo_extraido",
+              dstPath = "build",
+              android = {
+                  versionCode = "100",
+                  packageName = "com.comuzz.Puzzle4KidsFurniture",
+                  targetAppStore = "none" 
+              }
+          }
+          EOF
+
+          echo "Validando arquivo final build_android.lua:"
+          cat build_android.lua
+          
+          # 7. EXECUÇÃO DO CORONABUILDER
+          echo "Iniciando compilação nativa Android..."
+          "$TARGET_BUILDER" build --lua build_android.lua
+
+      - name: Coletar Arquivo APK Gerado
+        uses: actions/upload-artifact@v4
+        with:
+          name: Kitchen Puzzle 4 Kids Android
+          path: build/*.apk
+          if-no-files-found: error
