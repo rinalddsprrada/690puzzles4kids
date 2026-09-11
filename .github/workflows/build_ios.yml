@@ -51,7 +51,7 @@ jobs:
       - name: Baixar o Código Fonte (.zip)
         run: |
           # Adicione o link do seu ZIP entre as aspas abaixo:
-          curl -L -o projeto.zip "https://abuzznewasset.b-cdn.net/furniturefix.zip"
+          curl -L -o projeto.zip "https://abuzznewasset.b-cdn.net/furniture_resized.zip"
 
       - name: Extrair Código Fonte e Corrigir Raiz do main.lua
         run: |
