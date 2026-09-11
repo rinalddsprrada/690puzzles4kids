@@ -78,10 +78,9 @@ jobs:
               appVersion = "1.0.0",
               projectPath = "codigo_extraido",
               dstPath = "build",
-              android = {
-                  versionCode = "100",
-                  androidAppPackage = "com.comuzz.Puzzle4KidsFurniture",
-                  targetAppStore = "none" 
+              versionCode = "100",
+              androidAppPackage = "com.comuzz.Puzzle4KidsFurniture",
+              targetAppStore = "none" 
               }
           }
           EOF
