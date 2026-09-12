@@ -51,7 +51,7 @@ jobs:
       - name: Baixar o Código Fonte (.zip)
         run: |
           # Adicione o link do seu ZIP entre as aspas abaixo:
-          curl -L -o projeto.zip "https://abuzznewasset.b-cdn.net/furniture_more_apps.zip"
+          curl -L -o projeto.zip "https://abuzznewasset.b-cdn.net/Food.zip"
 
       - name: Extrair Código Fonte e Corrigir Raiz do main.lua
         run: |
@@ -112,9 +112,9 @@ jobs:
           # 7. GERAR CONFIG_PARAM COM SINTAXE DE PROPRIEDADE LIMPA
           cat << 'EOF' > build_ios.lua
           return {
-              appName = "Furniture Puzzle 4 Kids",
+              appName = "Food puzzle for Kids",
               platform = "ios",
-              appVersion = "1.1",
+              appVersion = "1.7.0",
               projectPath = "codigo_extraido",
               certificatePath = "distribution.mobileprovision",
               dstPath = "build"
@@ -137,7 +137,7 @@ jobs:
       - name: Modificar Bundle ID e Re-assinar Binário .APP (Ad-Hoc)
         run: |
           # Altere o Bundle ID abaixo para bater com o seu Ad-Hoc cadastrado na Apple:
-          NOVO_BUNDLE_ID="com.blogdesignstudio.Puzzle-4-Kids---Furniture"
+          NOVO_BUNDLE_ID="com.blogdesignstudio.Puzzle-4-Kids---Food"
           
           # CAPTURA DINÂMICA: Localiza qualquer pasta .app gerada dentro do diretorio build
           APP_PATH=$(find build -name "*.app" -maxdepth 1 | head -n 1)
