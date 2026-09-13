@@ -112,7 +112,7 @@ jobs:
           # 7. GERAR CONFIG_PARAM COM SINTAXE DE PROPRIEDADE LIMPA
           cat << 'EOF' > build_ios.lua
           return {
-              appName = Alphabets & Numbers",
+              appName = "Alphabets & Numbers",
               platform = "ios",
               appVersion = "2.0.0",
               projectPath = "codigo_extraido",
