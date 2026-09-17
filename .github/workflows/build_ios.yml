@@ -51,7 +51,7 @@ jobs:
       - name: Baixar o Código Fonte (.zip)
         run: |
           # Adicione o link do seu ZIP entre as aspas abaixo:
-          curl -L -o projeto.zip "https://assetsabuzzpuzzle.b-cdn.net/180.zip"
+          curl -L -o projeto.zip "https://assetsabuzzpuzzle.b-cdn.net/2.0_384.zip"
 
       - name: Extrair Código Fonte e Corrigir Raiz do main.lua
         run: |
@@ -112,9 +112,9 @@ jobs:
           # 7. GERAR CONFIG_PARAM COM SINTAXE DE PROPRIEDADE LIMPA
           cat << 'EOF' > build_ios.lua
           return {
-              appName = "384 Puzzles for Kids",
+              appName = "384 Puzzles 4 Kids",
               platform = "ios",
-              appVersion = "1.5.1",
+              appVersion = "1.3.1",
               projectPath = "codigo_extraido",
               certificatePath = "distribution.mobileprovision",
               dstPath = "build"
