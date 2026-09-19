@@ -51,7 +51,7 @@ jobs:
       - name: Baixar o Código Fonte (.zip)
         run: |
           # Adicione o link do seu ZIP entre as aspas abaixo:
-          curl -L -o projeto.zip "https://assetsabuzzpuzzle.b-cdn.net/toolfixed.zip"
+          curl -L -o projeto.zip "https://assetsabuzzpuzzle.b-cdn.net/toolprovider.zip"
 
       - name: Extrair Código Fonte e Corrigir Raiz do main.lua
         run: |
